@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node -r jiti/register -r tsconfig-paths/register -r dotenv/config apps/bot/main.ts"
+    "exec": "node -r jiti/register -r tsconfig-paths/register -r dotenv/config",
+    "start": "npm run exec apps/bot/main.ts"
   },
   "author": "talkiiing-team",
   "devDependencies": {
@@ -15,6 +16,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "grammy": "^1.18.3"
+    "grammy": "^1.18.3",
+    "python-shell": "^5.0.0"
   }
 }
