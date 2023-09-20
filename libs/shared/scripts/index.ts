@@ -1,2 +1,2 @@
-export * from "./script";
-export * from "./script-presenter";
+export * from './script'
+export * from './script-presenter'

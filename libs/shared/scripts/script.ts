@@ -1,3 +1,3 @@
-import { Dialog } from "../dialog";
+import { Dialog } from '../dialog'
 
-export type Script = (dialog: Dialog) => Promise<void>;
+export type Script = (dialog: Dialog) => Promise<void>

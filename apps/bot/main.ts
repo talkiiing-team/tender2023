@@ -1,5 +1,5 @@
-import { bot } from "./bot";
+import { bot } from './bot'
 
-console.log("Bot started");
+console.log('Bot started')
 
-bot.start();
+bot.start()

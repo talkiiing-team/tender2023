@@ -1,1 +1,1 @@
-export * from "./run-python";
+export * from './run-python'

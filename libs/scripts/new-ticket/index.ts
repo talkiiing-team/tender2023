@@ -1,1 +1,1 @@
-export * from "./new-ticket";
+export * from './new-ticket'

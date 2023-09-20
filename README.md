@@ -12,3 +12,7 @@ npm ci
 
 npm run dev
 ```
+
+## Как мигрировать бд
+
+Делаем изменения в `schema.prisma` и `npx prisma migrate dev`

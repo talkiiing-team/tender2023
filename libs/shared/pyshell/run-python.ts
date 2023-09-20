@@ -1,11 +1,11 @@
-import * as path from "path";
-import { PythonShell } from "python-shell";
+import * as path from 'path'
+import { PythonShell } from 'python-shell'
 
-export const runPython = async <T>(path: string, arg: any = ""): Promise<T> => {
-  const [result] = await PythonShell.run(path, { args: [JSON.stringify(arg)] });
+export const runPython = async <T>(path: string, arg: any = ''): Promise<T> => {
+  const [result] = await PythonShell.run(path, { args: [JSON.stringify(arg)] })
 
-  return JSON.parse(result) as T;
-};
+  return JSON.parse(result) as T
+}
 
 // if (require.main) {
 //   (async () => {

@@ -1,3 +1,3 @@
-export * from "./address";
-export * from "./extractor";
-export * from "./phone-number";
+export * from './address'
+export * from './extractor'
+export * from './phone-number'
