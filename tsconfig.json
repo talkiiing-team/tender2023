@@ -6,6 +6,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "types": ["node"],
     "noEmit": true,
+    "strictNullChecks": true,
     "paths": {
       "@apps/*": ["./apps/*"],
       "@libs/*": ["./libs/*"]

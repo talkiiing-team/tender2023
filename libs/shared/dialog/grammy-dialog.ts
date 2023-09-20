@@ -29,7 +29,10 @@ export const setupGrammyDialogMiddleware = () => {
 };
 
 export class GrammyDialogError extends Error {
-  constructor(message: string, public readonly context: any) {
+  constructor(
+    message: string,
+    public readonly context: any
+  ) {
     super(message);
     this.name = "GrammyDialogError";
   }
@@ -50,7 +53,7 @@ export class GrammyDialog implements Dialog {
     await this.#ctx.reply(question);
 
     const newContext = await new Promise<Context>((resolve, reject) => {
-      GLOBAL_DIALOGS_MAP.set(this.#ctx.chat.id, { resolve, reject });
+      GLOBAL_DIALOGS_MAP.set(this.#ctx.chat?.id ?? -1, { resolve, reject });
 
       console.log(GLOBAL_DIALOGS_MAP);
 
@@ -62,7 +65,7 @@ export class GrammyDialog implements Dialog {
           })
         );
 
-        GLOBAL_DIALOGS_MAP.delete(this.#ctx.chat.id);
+        GLOBAL_DIALOGS_MAP.delete(this.#ctx.chat?.id ?? -1);
       }, GRAMMY_DIALOG_TIMEOUT);
     });
 
