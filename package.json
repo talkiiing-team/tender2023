@@ -5,15 +5,19 @@
   "main": "index.js",
   "scripts": {
     "exec": "node -r jiti/register -r tsconfig-paths/register -r dotenv/config",
-    "start": "npm run exec apps/bot/main.ts"
+    "start": "npm run exec apps/bot/main.ts",
+    "test": "vitest"
   },
   "author": "talkiiing-team",
   "devDependencies": {
     "@types/node": "^20.6.2",
     "dotenv": "^16.3.1",
     "jiti": "^1.20.0",
+    "prettier": "^3.0.3",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "^0.34.4"
   },
   "dependencies": {
     "grammy": "^1.18.3",
