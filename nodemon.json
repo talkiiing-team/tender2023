@@ -1,0 +1,5 @@
+{
+  "watch": ["apps", "libs", "prisma"],
+  "ext": "ts,tsx,prisma",
+  "exec": "clear && npm run start"
+}
