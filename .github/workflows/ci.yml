@@ -42,3 +42,8 @@ jobs:
 
       - name: Test
         run: npm run test
+
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
