@@ -1,0 +1,44 @@
+name: ci
+
+on: ["push"]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+
+      - uses: actions/setup-node@v2
+        name: Setup node
+        with:
+          node-version: "18"
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.11"
+
+      - name: Cache PIP
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache NPM
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: PIP Install
+        run: pip install -r requirements.txt
+
+      - name: NPM Install
+        run: npm ci
+
+      - name: Test
+        run: npm run test

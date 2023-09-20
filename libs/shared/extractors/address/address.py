@@ -10,7 +10,7 @@ addr_extractor = AddrExtractor(morph_vocab)
 
 
 def extract_address(text: str) -> str:
-    addr = addr_extractor.find(sys.argv[1])
+    addr = addr_extractor.find(text)
 
     if not addr:
         return addr
