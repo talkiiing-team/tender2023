@@ -1,7 +1,7 @@
 import { Composer } from 'grammy'
 import axios from 'axios'
 
-const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL ?? ''
+const PYTHON_SERVICE_URL = process.env.BOT_PYTHON_ML_URL ?? ''
 
 export const debuggerComposer = new Composer().command('debug', async ctx => {
   const { data } = await axios.get(`${PYTHON_SERVICE_URL}/debug`)
