@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.3.1",
+    "axios": "^1.5.0",
     "grammy": "^1.18.3",
     "prisma": "^5.3.1",
     "python-shell": "^5.0.0"

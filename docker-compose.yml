@@ -1,12 +1,23 @@
-version: "3"
+version: '3'
 services:
   server:
-    build: .
+    build:
+      context: .
+      dockerfile: ./apps/bot/Dockerfile
     environment:
       - BOT_TOKEN=$BOT_TOKEN
       - BOT_DATABASE_URL=$BOT_DATABASE_URL
+      - BOT_PYTHON_ML_URL="http://ml:5000"
     depends_on:
       - db
+    networks:
+      - db_network
+    restart: always
+
+  ml:
+    build:
+      context: .
+      dockerfile: ./apps/python-ml/Dockerfile
     networks:
       - db_network
     restart: always
@@ -14,11 +25,11 @@ services:
   db:
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
-      POSTGRES_DB: "tender"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "talkiiingpostgrespassword"
+      POSTGRES_DB: 'tender'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'talkiiingpostgrespassword'
     networks:
       - db_network
     restart: always
