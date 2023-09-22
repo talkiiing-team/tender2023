@@ -31,7 +31,10 @@ export async function newTicketScript(dialog: Dialog) {
       dialog.prompt('Пожалуйста, укажите адрес доставки').then(d => d.message),
   )
 
-  if (!state.address) return await dialog.answer('Не удалось распознать адрес')
+  if (!state.address) {
+    await dialog.answer('Не удалось распознать адрес')
+    return
+  }
 
   state.phoneNumber = await extractIfNull(
     extractedTicket.phoneNumber,
@@ -40,8 +43,10 @@ export async function newTicketScript(dialog: Dialog) {
       dialog.prompt('Пожалуйста, укажите номер телефона').then(d => d.message),
   )
 
-  if (!state.phoneNumber)
-    return await dialog.answer('Не удалось распознать номер телефона')
+  if (!state.phoneNumber) {
+    await dialog.answer('Не удалось распознать номер телефона')
+    return
+  }
 
   const confirmation = await dialog
     .prompt(
