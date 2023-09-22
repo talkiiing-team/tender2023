@@ -19,8 +19,6 @@ services:
       POSTGRES_DB: "tender"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "talkiiingpostgrespassword"
-    volumes:
-      - ./db-data:/var/lib/postgresql/data
     networks:
       - db_network
     restart: always
