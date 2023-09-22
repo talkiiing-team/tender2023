@@ -1,4 +1,4 @@
-FROM nikolaik/python3.11-nodejs18-bullseye
+FROM nikolaik/python-nodejs:python3.11-nodejs18-bullseye
 
 USER pn
 WORKDIR /home/pn/app

@@ -1,0 +1,30 @@
+version: "3"
+services:
+  server:
+    build: .
+    environment:
+      - BOT_TOKEN=$BOT_TOKEN
+      - BOT_DATABASE_URL=$BOT_DATABASE_URL
+    depends_on:
+      - db
+    networks:
+      - db_network
+    restart: always
+
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "tender"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "talkiiingpostgrespassword"
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    networks:
+      - db_network
+    restart: always
+
+networks:
+  db_network:
+    driver: bridge

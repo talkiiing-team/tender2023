@@ -4,3 +4,4 @@ node_modules
 pyvenv.cfg
 bin
 lib
+db-data/
