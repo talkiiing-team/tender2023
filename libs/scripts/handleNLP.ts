@@ -61,7 +61,7 @@ ${
     : 'Надеюсь, Вам поможет следующий ответ:'
 }
 
-<i>${answer?.length ? answer : classes[i].intent}</i>?
+<i>${answer?.length ? answer : classes[i].intent}</i>
   `,
         {
           yes: 'Спасибо, ответ помог',
@@ -86,6 +86,8 @@ ${
       continue
     } else if (confirmation === 'keyboard:actions') {
       break
+    } else if (!confirmation.startsWith('keyboard')) {
+      return
     }
   }
 

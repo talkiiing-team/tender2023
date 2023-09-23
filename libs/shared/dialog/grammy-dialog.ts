@@ -32,7 +32,7 @@ export const setupGrammyDialogMiddleware = () => {
       ? 'kbd'
       : 'text'
 
-    console.log(id)
+    //console.log(id)
 
     if (id === undefined) {
       console.error('ID not found')
@@ -42,7 +42,7 @@ export const setupGrammyDialogMiddleware = () => {
 
     const resolver = GLOBAL_DIALOGS_MAP.get(id)
 
-    console.log('resolver', resolver)
+    //console.log('resolver', resolver)
 
     if (resolver) {
       resolver.resolve(ctx)
@@ -108,7 +108,7 @@ export class GrammyDialog implements Dialog {
         reject,
       })
 
-      console.log(GLOBAL_DIALOGS_MAP)
+      //console.log(GLOBAL_DIALOGS_MAP)
 
       setTimeout(() => {
         reject(

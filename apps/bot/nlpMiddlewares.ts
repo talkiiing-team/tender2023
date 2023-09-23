@@ -1,7 +1,6 @@
 import { Composer } from 'grammy'
 import { initNLP } from '@apps/nlp/nlp'
 import { presentScriptToMiddleware } from '@libs/shared/scripts'
-import { searchPositionsScript } from '@libs/scripts/search-positions'
 import { handleNLPScript } from '@libs/scripts/handleNLP'
 
 export const initNLPMiddlewares = async () => {
@@ -15,15 +14,18 @@ export const initNLPMiddlewares = async () => {
 
     const prompt = stemmer.tokenizeAndStem(ctx.message.text).join(' ')
 
-    console.log(prompt)
-
     const result = await nlp.process('ru', prompt)
+
+    console.log(result)
+
     const classes = result.classifications.filter(
-      v => !v.intent.startsWith('ignored') && v.score >= 0.2,
+      v =>
+        !v.intent.startsWith('ignored') &&
+        (v.score >= 0.2 || v.intent.startsWith('pretrain')),
     )
 
-    const ignored = result.classifications.filter(
-      v => v.intent.startsWith('ignored') && v.score > 0.05,
+    const ignored = result.classifications.filter(v =>
+      v.intent.startsWith('ignored'),
     )
 
     const utilityMessage = ignored.length && !classes.length

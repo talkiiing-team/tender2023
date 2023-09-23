@@ -1,6 +1,6 @@
 import { containerBootstrap } from '@nlpjs/core'
 import { Nlp } from '@nlpjs/nlp'
-import { LangRu, NormalizerRu, StemmerRu } from '@nlpjs/lang-ru'
+import { LangRu, NormalizerRu, StemmerRu, StopwordsRu } from '@nlpjs/lang-ru'
 import { NLP } from './types'
 import {
   addScenarios,
@@ -11,10 +11,11 @@ import { scenarios, scenariosAnswer } from '@libs/nlp/scenarios/list'
 export const initNLP = async () => {
   const container = (await containerBootstrap()) as NLP.Dock
 
+  container.use(LangRu)
   container.use(NormalizerRu)
   container.use(StemmerRu)
+  container.use(StopwordsRu)
   container.use(Nlp)
-  container.use(LangRu)
 
   // console.log(
   //   container
