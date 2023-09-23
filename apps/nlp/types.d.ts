@@ -1,6 +1,10 @@
 export type IntentOption = { intent: string; score: number }
 
 export declare namespace NLP {
+  interface Stemmer {
+    tokenizeAndStem(text: string): Array<string>
+  }
+
   interface Instance {
     addLanguage: (language: string) => void
     addDocument: (language: string, utterance: string, intent: string) => void
@@ -21,10 +25,10 @@ export declare namespace NLP {
     score: number
     answers: string[]
     entities: NLP.Entity[]
-    sentiment: NLP.Sentiment
+    // sentiment: NLP.Sentiment
     srcAnswer: string
     answer: string
-    actions: NLP.Action[]
+    // actions: NLP.Action[]
     classifications: IntentOption[]
   }
 
@@ -38,7 +42,8 @@ export declare namespace NLP {
   }
 
   interface Dock {
-    get: (model: string) => NLP.Instance
+    get(model: 'nlp'): NLP.Instance
+    get(model: 'stemmer-ru'): NLP.Stemmer
     use: (any: any) => any
   }
 }

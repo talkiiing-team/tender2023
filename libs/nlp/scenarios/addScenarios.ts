@@ -9,14 +9,14 @@ export type Scenario<T = OneLayerScenario<string[]>> = Record<
 
 export type ScenarioAnswers = Record<string, string | OneLayerScenario<string>>
 
-export const addScenarios = (nlp: NLP.Instance) =>
+export const addScenarios = (nlp: NLP.Instance, stemmer: NLP.Stemmer) =>
   function patchNLP(maps: Scenario, prefix?: string) {
     Object.entries(maps).forEach(([key, utterances]) =>
       Array.isArray(utterances)
         ? utterances.forEach(phrase =>
             nlp.addDocument(
               'ru',
-              phrase,
+              stemmer.tokenizeAndStem(phrase).join(' '),
               `${prefix ? `${prefix}.` : ''}${key}`,
             ),
           )

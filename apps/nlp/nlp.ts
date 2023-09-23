@@ -1,6 +1,6 @@
 import { containerBootstrap } from '@nlpjs/core'
 import { Nlp } from '@nlpjs/nlp'
-import { LangRu, NormalizerRu } from '@nlpjs/lang-ru'
+import { LangRu, NormalizerRu, StemmerRu } from '@nlpjs/lang-ru'
 import { NLP } from './types'
 import {
   addScenarios,
@@ -10,18 +10,34 @@ import { scenarios, scenariosAnswer } from '@libs/nlp/scenarios/list'
 
 export const initNLP = async () => {
   const container = (await containerBootstrap()) as NLP.Dock
+
   container.use(NormalizerRu)
+  container.use(StemmerRu)
   container.use(Nlp)
   container.use(LangRu)
+
+  // console.log(
+  //   container
+  //     .get('stemmer-ru')
+  //     .tokenizeAndStem(
+  //       'Какие существуют основания для блокировки на Портале Поставщиков',
+  //     ),
+  // )
+
+  const stemmer = container.get('stemmer-ru') as NLP.Stemmer
+
   const nlp = container.get('nlp')
   nlp.settings.autoSave = false
   nlp.addLanguage('ru')
 
-  const add = addScenarios(nlp)
+  const add = addScenarios(nlp, stemmer)
   add(scenarios)
   const addAnswers = addScenariosAnswers(nlp)
   addAnswers(scenariosAnswer)
 
   await nlp.train()
-  return nlp
+  return {
+    nlp,
+    stemmer,
+  }
 }
