@@ -10,7 +10,7 @@ export const initBot = async () => {
 
   bot.use(setupGrammyDialogMiddleware())
 
-  bot.use(debuggerComposer)
+  // bot.use(debuggerComposer)
 
   bot.command('ticket', presentScriptToMiddleware(newTicketScript))
 
