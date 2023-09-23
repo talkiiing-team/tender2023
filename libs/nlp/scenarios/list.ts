@@ -8,6 +8,15 @@ export const readAnswerText = (q: number) => {
   ).toString()
 }
 
+export const extractLaw = (lawNumber: number) => {
+  return [
+    `что такое ${lawNumber}-фз`,
+    `определение ${lawNumber}-фз`,
+    `что такое ${lawNumber} фз`,
+    `определение ${lawNumber} фз`,
+  ]
+}
+
 export const scenarios: Scenario = {
   new: ['найти товар', 'новая поставка'],
   ignored: {
@@ -140,12 +149,10 @@ export const scenarios: Scenario = {
       'определение ',
     ],
     60: ['что такое ', 'определение '],
-    61: [
-      'что такое 44-фз',
-      'определение 44-фз',
-      'что такое 44 фз',
-      'определение 44 фз',
-    ],
+    61: extractLaw(44),
+    62: extractLaw(223),
+    63: extractLaw(46),
+    64: extractLaw(94),
   },
 }
 
@@ -207,5 +214,8 @@ export const scenariosAnswer: ScenarioAnswers = {
     49: readAnswerText(49),
     50: readAnswerText(50),
     61: readAnswerText(61),
+    62: readAnswerText(62),
+    63: readAnswerText(63),
+    64: readAnswerText(64),
   },
 }
