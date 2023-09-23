@@ -1,3 +1,5 @@
+export type IntentOption = { intent: string; score: number }
+
 export declare namespace NLP {
   interface Instance {
     addLanguage: (language: string) => void
@@ -23,7 +25,7 @@ export declare namespace NLP {
     srcAnswer: string
     answer: string
     actions: NLP.Action[]
-    classifications: { intent: string; score: number }[]
+    classifications: IntentOption[]
   }
 
   interface Entity {

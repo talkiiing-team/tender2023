@@ -24,7 +24,9 @@ export const initNLPMiddlewares = async () => {
     const utilityMessage = ignored.length && !classes.length
 
     if (result.intent === 'None') {
-      await ctx.reply('Сейчас постараюсь найти информацию...')
+      await ctx.reply(
+        'Сейчас постараюсь найти информацию... (отправляем запрос в пайфн)',
+      )
       // Python
       return
     } else if ((utilityMessage && result.answer?.length) || !classes.length) {
