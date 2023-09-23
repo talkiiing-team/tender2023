@@ -2,6 +2,7 @@ import { Composer } from 'grammy'
 import { initNLP } from '@apps/nlp/nlp'
 import { presentScriptToMiddleware } from '@libs/shared/scripts'
 import { handleNLPScript } from '@libs/scripts/handleNLP'
+import { scenarioActions } from '@libs/nlp/scenarios/list'
 
 export const initNLPMiddlewares = async () => {
   const { nlp, stemmer } = await initNLP()

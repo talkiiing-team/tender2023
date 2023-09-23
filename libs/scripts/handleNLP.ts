@@ -3,7 +3,13 @@ import { IntentOption, NLP } from '@apps/nlp/types'
 import { presentScriptToMiddleware } from '@libs/shared/scripts'
 import { searchPositionsScript } from '@libs/scripts/search-positions'
 import { extractAnswer } from '@libs/nlp/scenarios/extractAnswer'
-import { scenariosAnswer } from '@libs/nlp/scenarios/list'
+import {
+  scenarioActions,
+  scenarios,
+  scenariosAnswer,
+} from '@libs/nlp/scenarios/list'
+import { InlineKeyboard } from 'grammy'
+import { indexInto } from '@libs/shared/utils/index-into'
 
 const ALPHA = 1
 
@@ -14,10 +20,9 @@ export const handleNLPScript = async (
   dialog: Dialog,
   next,
   {
-    result,
     classes,
+    nlp,
   }: {
-    result: NLP.Result
     classes: NLP.Result['classifications']
     nlp: NLP.Instance
   },
@@ -50,6 +55,27 @@ export const handleNLPScript = async (
   console.log(JSON.stringify(groupedIntents))
 
   for (let i = 0; i < groupedIntents.questions.length; i++) {
+    const currentIntent = classes[i].intent
+
+    let keyboard: InlineKeyboard | undefined = scenarioActions[currentIntent]?.(
+      nlp,
+      dialog,
+    )
+
+    if (!keyboard && i < 4) {
+      keyboard = new InlineKeyboard([
+        classes
+          .slice(i + 1, 2)
+          .filter(intent => intent.score > 0.1)
+          .map(c => ({
+            text:
+              (indexInto(scenarios, c.intent)?.[0] as unknown as string) ??
+              'Следующий ответ',
+            callback_data: c.intent,
+          })),
+      ])
+    }
+
     const answer = extractAnswerLabel(classes[i].intent)
     //if (!answer) continue
     const confirmation = await dialog
@@ -72,6 +98,7 @@ ${
             ? { actions: 'Просмотреть связанные задачи 👀' }
             : {}),
         },
+        keyboard,
       )
       .then(d => d.message)
 
@@ -86,6 +113,17 @@ ${
       continue
     } else if (confirmation === 'keyboard:actions') {
       break
+    } else if (confirmation.startsWith('keyboard:pretrain')) {
+      await handleNLPScript(dialog, next, {
+        nlp,
+        classes: [
+          {
+            intent: confirmation.substring(9),
+            score: 1,
+          },
+        ],
+      })
+      return
     } else if (!confirmation.startsWith('keyboard')) {
       return
     }

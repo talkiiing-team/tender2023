@@ -86,12 +86,17 @@ export class GrammyDialog implements Dialog {
   async prompt(
     question: string,
     keyboard?: Record<string, string>,
+    inlineKeyboard?: InlineKeyboard,
   ): Promise<Dialog> {
     if (keyboard) {
       const buttonRow = Object.entries(keyboard).map(([data, label]) =>
         InlineKeyboard.text(label, data),
       )
-      const builtKeyboard = InlineKeyboard.from([buttonRow])
+
+      const builtKeyboard = inlineKeyboard
+        ? InlineKeyboard.from([...inlineKeyboard.inline_keyboard, buttonRow])
+        : InlineKeyboard.from([buttonRow])
+
       await this.#ctx.reply(question, {
         reply_markup: builtKeyboard,
         parse_mode: 'HTML',
@@ -111,12 +116,12 @@ export class GrammyDialog implements Dialog {
       //console.log(GLOBAL_DIALOGS_MAP)
 
       setTimeout(() => {
-        reject(
-          new GrammyDialogError('Timeout at prompt', {
-            context: this.#ctx,
-            question,
-          }),
-        )
+        // reject(
+        //   new GrammyDialogError('Timeout at prompt', {
+        //     context: this.#ctx,
+        //     question,
+        //   }),
+        // )
 
         GLOBAL_DIALOGS_MAP.delete(this.#ctx.chat?.id ?? -1)
       }, GRAMMY_DIALOG_TIMEOUT)

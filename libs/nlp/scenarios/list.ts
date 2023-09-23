@@ -1,5 +1,10 @@
-import { Scenario, ScenarioAnswers } from '@libs/nlp/scenarios/addScenarios'
+import {
+  Scenario,
+  ScenarioActions,
+  ScenarioAnswers,
+} from '@libs/nlp/scenarios/addScenarios'
 import { readFileSync } from 'fs'
+import { InlineKeyboard } from 'grammy'
 import * as path from 'path'
 
 export const readAnswerText = (q: number) => {
@@ -14,6 +19,8 @@ export const extractLaw = (lawNumber: number) => {
     `определение ${lawNumber}-фз`,
     `что такое ${lawNumber} фз`,
     `определение ${lawNumber} фз`,
+    `что такое ${lawNumber}фз`,
+    `определение ${lawNumber}фз`,
   ]
 }
 
@@ -31,6 +38,7 @@ export const scenarios: Scenario = {
     2: [
       'Как обжаловать блокировку на Портале поставщиков',
       'убрать разблокировать аккаунт на портале поставщиков',
+      'разблокировка аккаунта',
     ],
     3: [
       'Кто может являться заказчиком на Портале поставщиков',
@@ -210,4 +218,115 @@ export const scenariosAnswer: ScenarioAnswers = {
       'Приветствую! Возможно вы задали вопрос, но я не смог найти ответ на него, повторите его еще раз, пожалуйста',
   },
   pretrain: formAnswersPretrain(90),
+}
+
+export const scenarioActions: ScenarioActions = {
+  'pretrain.61': (nlp, dialog) =>
+    new InlineKeyboard([
+      [
+        {
+          text: 'Полный текст 44-ФЗ',
+          url: 'https://www.consultant.ru/document/cons_doc_LAW_144624/',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 223-ФЗ',
+          callback_data: 'pretrain.62',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 46-ФЗ',
+          callback_data: 'pretrain.63',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 94-ФЗ',
+          callback_data: 'pretrain.64',
+        },
+      ],
+    ]),
+  'pretrain.62': (nlp, dialog) =>
+    new InlineKeyboard([
+      [
+        {
+          text: 'Полный текст 223-ФЗ',
+          url: 'https://www.consultant.ru/document/cons_doc_LAW_116964/',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 44-ФЗ',
+          callback_data: 'pretrain.61',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 46-ФЗ',
+          callback_data: 'pretrain.63',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 94-ФЗ',
+          callback_data: 'pretrain.64',
+        },
+      ],
+    ]),
+  'pretrain.63': (nlp, dialog) =>
+    new InlineKeyboard([
+      [
+        {
+          text: 'Полный текст 46-ФЗ',
+          url: 'https://www.consultant.ru/document/cons_doc_LAW_411095/',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 44-ФЗ',
+          callback_data: 'pretrain.61',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 223-ФЗ',
+          callback_data: 'pretrain.62',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 94-ФЗ',
+          callback_data: 'pretrain.64',
+        },
+      ],
+    ]),
+  'pretrain.64': (nlp, dialog) =>
+    new InlineKeyboard([
+      [
+        {
+          text: 'Полный текст 94-ФЗ',
+          url: 'https://www.consultant.ru/document/cons_doc_LAW_54598/',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 44-ФЗ',
+          callback_data: 'pretrain.61',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 223-ФЗ',
+          callback_data: 'pretrain.62',
+        },
+      ],
+      [
+        {
+          text: 'Узнать о 46-ФЗ',
+          callback_data: 'pretrain.63',
+        },
+      ],
+    ]),
 }

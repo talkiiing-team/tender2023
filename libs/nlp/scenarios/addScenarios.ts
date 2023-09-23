@@ -1,4 +1,6 @@
 import { NLP } from '@apps/nlp/types'
+import { Dialog } from '@libs/shared/dialog'
+import { InlineKeyboard } from 'grammy'
 
 export type OneLayerScenario<T> = Record<string, T>
 
@@ -8,6 +10,11 @@ export type Scenario<T = OneLayerScenario<string[]>> = Record<
 >
 
 export type ScenarioAnswers = Record<string, string | OneLayerScenario<string>>
+
+export type ScenarioActions = Record<
+  string,
+  (nlp: NLP.Instance, dialog: Dialog) => InlineKeyboard
+>
 
 export const addScenarios = (nlp: NLP.Instance, stemmer: NLP.Stemmer) =>
   function patchNLP(maps: Scenario, prefix?: string) {
