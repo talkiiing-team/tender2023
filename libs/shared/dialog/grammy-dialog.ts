@@ -1,4 +1,4 @@
-import { Composer, Context } from 'grammy'
+import { Composer, Context, InlineKeyboard } from 'grammy'
 import { Dialog } from './dialog'
 
 type DialogPromiseResolver = {
@@ -6,23 +6,50 @@ type DialogPromiseResolver = {
   reject: (reason?: any) => void
 }
 
+export const getAnswerType = (ctx: Context): 'kbd' | 'text' =>
+  ctx.chat
+    ? 'text'
+    : ctx.callbackQuery || ctx.update.callback_query
+    ? 'kbd'
+    : 'text'
+
 const GRAMMY_DIALOG_TIMEOUT = 1000 * 60 * 5
 
 const GLOBAL_COMPOSER = new Composer()
 const GLOBAL_DIALOGS_MAP = new Map<number, DialogPromiseResolver>()
 
 export const setupGrammyDialogMiddleware = () => {
-  GLOBAL_COMPOSER.on('message', async (ctx, next) => {
-    const resolver = GLOBAL_DIALOGS_MAP.get(ctx.chat.id)
+  GLOBAL_COMPOSER.on(['message', 'callback_query:data'], async (ctx, next) => {
+    const id = ctx.chat
+      ? ctx.chat.id
+      : ctx.callbackQuery
+      ? ctx.callbackQuery.from.id
+      : undefined
+
+    const type: 'kbd' | 'text' = ctx.chat
+      ? 'text'
+      : ctx.callbackQuery
+      ? 'kbd'
+      : 'text'
+
+    console.log(id)
+
+    if (id === undefined) {
+      console.error('ID not found')
+      next()
+      return
+    }
+
+    const resolver = GLOBAL_DIALOGS_MAP.get(id)
 
     console.log('resolver', resolver)
 
     if (resolver) {
       resolver.resolve(ctx)
-      GLOBAL_DIALOGS_MAP.delete(ctx.chat.id)
+      GLOBAL_DIALOGS_MAP.delete(id)
     }
 
-    await next()
+    next()
   })
 
   return GLOBAL_COMPOSER.middleware()
@@ -46,14 +73,40 @@ export class GrammyDialog implements Dialog {
   }
 
   get message(): string {
-    return this.#ctx.message?.text ?? ''
+    if (this.#ctx.message?.text) return this.#ctx.message?.text
+    if (this.#ctx.update.callback_query?.data)
+      return `keyboard:${this.#ctx.update.callback_query?.data}`
+    return ''
   }
 
-  async prompt(question: string): Promise<Dialog> {
-    await this.#ctx.reply(question)
+  get context(): Context {
+    return this.#ctx
+  }
+
+  async prompt(
+    question: string,
+    keyboard?: Record<string, string>,
+  ): Promise<Dialog> {
+    if (keyboard) {
+      const buttonRow = Object.entries(keyboard).map(([data, label]) =>
+        InlineKeyboard.text(label, data),
+      )
+      const builtKeyboard = InlineKeyboard.from([buttonRow])
+      await this.#ctx.reply(question, {
+        reply_markup: builtKeyboard,
+        parse_mode: 'HTML',
+      })
+    } else {
+      await this.#ctx.reply(question, {
+        parse_mode: 'HTML',
+      })
+    }
 
     const newContext = await new Promise<Context>((resolve, reject) => {
-      GLOBAL_DIALOGS_MAP.set(this.#ctx.chat?.id ?? -1, { resolve, reject })
+      GLOBAL_DIALOGS_MAP.set(this.#ctx.chat?.id ?? -1, {
+        resolve,
+        reject,
+      })
 
       console.log(GLOBAL_DIALOGS_MAP)
 

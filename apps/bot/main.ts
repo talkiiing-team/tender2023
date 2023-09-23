@@ -1,5 +1,8 @@
-import { bot } from './bot'
+import { initBot } from './bot'
 
-console.log('Bot started')
+console.log('Starting')
 
-bot.start()
+initBot().then(bot => {
+  bot.start()
+  console.log('Bot started')
+})

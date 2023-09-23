@@ -3,17 +3,22 @@ import { setupGrammyDialogMiddleware } from '@libs/shared/dialog'
 import { presentScriptToMiddleware } from '@libs/shared/scripts'
 import { Bot } from 'grammy'
 import { debuggerComposer } from './debugger'
+import { initNLPMiddlewares } from '@apps/bot/nlpMiddlewares'
 
-const bot = new Bot(process.env.BOT_TOKEN ?? '')
+export const initBot = async () => {
+  const bot = new Bot(process.env.BOT_TOKEN ?? '')
 
-bot.use(setupGrammyDialogMiddleware())
+  bot.use(setupGrammyDialogMiddleware())
 
-bot.use(debuggerComposer)
+  bot.use(debuggerComposer)
 
-bot.command('ticket', presentScriptToMiddleware(newTicketScript))
+  bot.command('ticket', presentScriptToMiddleware(newTicketScript))
 
-bot.catch(err => {
-  console.error(err)
-})
+  bot.use(await initNLPMiddlewares())
 
-export { bot }
+  bot.catch(err => {
+    console.error(err)
+  })
+
+  return bot
+}
