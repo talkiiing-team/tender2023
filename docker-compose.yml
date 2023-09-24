@@ -7,7 +7,7 @@ services:
     environment:
       - BOT_TOKEN=$BOT_TOKEN
       - BOT_DATABASE_URL=$BOT_DATABASE_URL
-      - BOT_PYTHON_ML_URL=http://ml:5000
+      - BOT_PYTHON_ML_URL=http://ml:5001
     depends_on:
       - db
     networks:
@@ -21,7 +21,7 @@ services:
     networks:
       - db_network
     ports:
-      - '5000:5000'
+      - '5001:5001'
     restart: always
 
   db:

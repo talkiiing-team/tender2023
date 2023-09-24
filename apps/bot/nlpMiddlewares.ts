@@ -6,7 +6,7 @@ import { scenarioActions } from '@libs/nlp/scenarios/list'
 import axios from 'axios'
 
 const PYTHON_SERVICE_URL =
-  process.env.BOT_PYTHON_ML_URL ?? 'http://localhost:5000'
+  process.env.BOT_PYTHON_ML_URL ?? 'http://localhost:5001'
 
 export const initNLPMiddlewares = async () => {
   const { nlp, stemmer } = await initNLP()
