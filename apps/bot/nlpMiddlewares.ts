@@ -5,6 +5,9 @@ import { handleNLPScript } from '@libs/scripts/handleNLP'
 import { scenarioActions } from '@libs/nlp/scenarios/list'
 import axios from 'axios'
 
+const PYTHON_SERVICE_URL =
+  process.env.BOT_PYTHON_ML_URL ?? 'http://localhost:5000'
+
 export const initNLPMiddlewares = async () => {
   const { nlp, stemmer } = await initNLP()
   const composer = new Composer()
@@ -37,7 +40,7 @@ export const initNLPMiddlewares = async () => {
       await ctx.reply(
         'Сейчас постараюсь найти информацию, подождите, пожалуйста... ',
       )
-      const answer = await axios.post('http://localhost:5001/answer', {
+      const answer = await axios.post(`${PYTHON_SERVICE_URL}/answer`, {
         prompt: ctx.message.text,
       })
       await ctx.reply(answer.data.answer)
