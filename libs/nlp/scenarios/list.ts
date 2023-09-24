@@ -271,7 +271,7 @@ export const scenarios: Scenario = {
       'что такое машиночитаемая доверенность',
       'определение машиночитаемая доверенность',
       'машиночитаемая доверенность это',
-    ],,
+    ],
     ...Object.fromEntries(dataset.map(entry => [entry.id, [entry.question]])),
   },
 }
