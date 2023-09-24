@@ -24,19 +24,26 @@ export const initNLPMiddlewares = async () => {
 
     console.log(result)
 
-    const classes = result.classifications.filter(
-      v =>
-        !v.intent.startsWith('ignored') &&
-        ((!v.intent.startsWith('pretrain') && v.score >= 0.2) ||
-          (v.intent.startsWith('pretrain') && v.score > 0.5)),
+    const ignored = result.classifications.filter(v =>
+      v.intent.startsWith('ignored'),
     )
+
+    const ignoredK = 1 - ignored.reduce((acc, v) => acc + v.score, 0)
+
+    const classes = result.classifications
+      .map(v => {
+        v.score /= ignoredK
+        return v
+      })
+      .filter(
+        v =>
+          !v.intent.startsWith('ignored') &&
+          ((!v.intent.startsWith('pretrain') && v.score >= 0.2) ||
+            (v.intent.startsWith('pretrain') && v.score > 0.7)),
+      )
 
     const badClasses = result.classifications.filter(
       v => !v.intent.startsWith('ignored') && v.score > 0.2,
-    )
-
-    const ignored = result.classifications.filter(v =>
-      v.intent.startsWith('ignored'),
     )
 
     const utilityMessage = ignored.reduce((acc, v) => acc + v.score, 0) > 0.7
