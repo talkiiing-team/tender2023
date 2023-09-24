@@ -264,6 +264,14 @@ export const scenarios: Scenario = {
       'определение эп',
       'эп это',
     ],
+    91: [
+      'что такое мчд',
+      'определение мчд',
+      'мчд это',
+      'что такое машиночитаемая доверенность',
+      'определение машиночитаемая доверенность',
+      'машиночитаемая доверенность это',
+    ],,
     ...Object.fromEntries(dataset.map(entry => [entry.id, [entry.question]])),
   },
 }
@@ -282,7 +290,7 @@ export const scenariosAnswer: ScenarioAnswers = {
     thanks: 'Пожалуйста! Обращайтесь 🤝',
   },
   pretrain: {
-    ...formAnswersPretrain(90),
+    ...formAnswersPretrain(91),
     ...Object.fromEntries(dataset.map(entry => [entry.id, entry.answer])),
   },
 }
