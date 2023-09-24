@@ -8,6 +8,8 @@ services:
       - BOT_TOKEN=$BOT_TOKEN
       - BOT_DATABASE_URL=$BOT_DATABASE_URL
       - BOT_PYTHON_ML_URL=http://ml:5001
+    volumes:
+      - ./apps/python-ml/:/home/pn/app/apps/python-ml
     depends_on:
       - db
     networks:
