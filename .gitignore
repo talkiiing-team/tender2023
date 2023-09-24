@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 .env
 pyvenv.cfg
+model_bert.pkl
 bin
 lib
 db-data/
