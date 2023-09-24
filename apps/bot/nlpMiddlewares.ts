@@ -102,6 +102,11 @@ export const initNLPMiddlewares = async () => {
             classes: badClasses,
             nlp,
           })
+        } else {
+          await ctx.reply(`
+К сожалению, больше ответов у меня нет.
+Возможно, Вы могли бы переформулировать вопрос?
+Я передам ваш вопрос человеку :)`)
         }
       }
       return
