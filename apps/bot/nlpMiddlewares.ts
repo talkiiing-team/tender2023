@@ -68,9 +68,9 @@ export const initNLPMiddlewares = async () => {
       if (!answer) {
         await ctx.reply(
           'К сожалению, я не могу подобрать наилучший ответ для Ваc в данный момент\n\n' +
-            badClasses.length
-            ? 'Ознакомьтесь с наименее релевантными ответами:'
-            : 'Обратитесь, пожалуйста, позднее',
+            (badClasses.length
+              ? 'Ознакомьтесь с наименее релевантными ответами:'
+              : 'Обратитесь, пожалуйста, позднее'),
         )
       } else {
         const dialog = new GrammyDialog(ctx)
@@ -102,8 +102,6 @@ export const initNLPMiddlewares = async () => {
             classes: badClasses,
             nlp,
           })
-        } else {
-          await ctx.reply('Сожалею об этом...')
         }
       }
       return
