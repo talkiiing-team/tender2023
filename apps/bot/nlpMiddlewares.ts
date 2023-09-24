@@ -30,6 +30,10 @@ export const initNLPMiddlewares = async () => {
           (v.intent.startsWith('pretrain') && v.score > 0.7)),
     )
 
+    const badClasses = result.classifications.filter(
+      v => !v.intent.startsWith('ignored') && v.score > 0.2,
+    )
+
     const ignored = result.classifications.filter(v =>
       v.intent.startsWith('ignored'),
     )
@@ -49,12 +53,21 @@ export const initNLPMiddlewares = async () => {
         .catch(e => undefined)
       if (!answer) {
         await ctx.reply(
-          'К сожалению, я не могу подобрать ответ для Ваc в данный момент\n\n' +
-            'Попробуйте, пожалуйста, позднее',
+          'К сожалению, я не могу подобрать наилучший ответ для Ваc в данный момент\n\n' +
+            badClasses.length
+            ? 'Ознакомьтесь с наименее релевантными ответами:'
+            : 'Обратитесь, пожалуйста, позднее',
         )
+        if (badClasses.length) {
+          await presentScriptToMiddleware(handleNLPScript)(ctx, next, {
+            result,
+            badClasses,
+            nlp,
+          })
+        }
         return
       }
-      await ctx.reply('Этот ответ вам должен подойти:\n\n', answer)
+      await ctx.reply(`Этот ответ вам должен подойти:\n\n${answer}`)
       return
     } else if (utilityMessage) {
       await ctx.reply(result.answer)
