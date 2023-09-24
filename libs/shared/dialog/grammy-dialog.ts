@@ -1,5 +1,5 @@
-import { Composer, Context, InlineKeyboard } from 'grammy'
-import { Dialog } from './dialog'
+import { Composer, Context, InlineKeyboard, InputMediaBuilder } from 'grammy'
+import { Dialog, DialogPayload } from './dialog'
 
 type DialogPromiseResolver = {
   resolve: (value: Context) => void
@@ -85,17 +85,19 @@ export class GrammyDialog implements Dialog {
 
   async prompt(
     question: string,
-    keyboard?: Record<string, string>,
+    payload?: Partial<DialogPayload>,
     inlineKeyboard?: InlineKeyboard,
   ): Promise<Dialog> {
-    if (keyboard) {
-      const buttonRow = Object.entries(keyboard).map(([data, label]) =>
-        InlineKeyboard.text(label, data),
+    if (payload?.keyboard) {
+      const buttonRows = payload.keyboard.map(kbd =>
+        Object.entries(kbd).map(([data, label]) =>
+          InlineKeyboard.text(label, data),
+        ),
       )
 
       const builtKeyboard = inlineKeyboard
-        ? InlineKeyboard.from([...inlineKeyboard.inline_keyboard, buttonRow])
-        : InlineKeyboard.from([buttonRow])
+        ? InlineKeyboard.from(inlineKeyboard.inline_keyboard)
+        : InlineKeyboard.from(buttonRows)
 
       await this.#ctx.reply(question, {
         reply_markup: builtKeyboard,
@@ -130,8 +132,30 @@ export class GrammyDialog implements Dialog {
     return new GrammyDialog(newContext)
   }
 
-  async answer(question: string): Promise<Dialog> {
-    await this.#ctx.reply(question)
+  async answer(
+    question: string,
+    payload?: Partial<DialogPayload>,
+  ): Promise<Dialog> {
+    if (payload?.media) {
+      const medias = payload.media.map(v => InputMediaBuilder.photo(v))
+      await this.#ctx.replyWithMediaGroup(medias)
+    }
+    if (payload?.keyboard) {
+      const buttonRows = payload.keyboard.map(kbd =>
+        Object.entries(kbd).map(([data, label]) =>
+          InlineKeyboard.url(label, data),
+        ),
+      )
+      const builtKeyboard = InlineKeyboard.from(buttonRows)
+      await this.#ctx.reply(question, {
+        reply_markup: builtKeyboard,
+        parse_mode: 'HTML',
+      })
+    } else {
+      await this.#ctx.reply(question, {
+        parse_mode: 'HTML',
+      })
+    }
 
     return this
   }

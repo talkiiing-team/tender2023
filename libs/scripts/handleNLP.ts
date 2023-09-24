@@ -45,7 +45,7 @@ export const handleNLPScript = async (
     },
   )
 
-  const highestRating = groupedIntents.questions?.[0].score
+  const highestRating = groupedIntents.questions?.[0]?.score
   if (highestRating) {
     groupedIntents.questions = groupedIntents.questions.filter(
       v => v.score >= highestRating - ALPHA,
@@ -87,16 +87,22 @@ ${
     : 'Надеюсь, Вам поможет следующий ответ:'
 }
 
-<i>${answer?.length ? answer : classes[i].intent}</i>
+<i>${answer?.length ? answer : groupedIntents.questions[i].intent}</i>
   `,
         {
-          yes: 'Спасибо, ответ помог',
-          ...(groupedIntents.actions.length > i + 1
-            ? { no: 'Другой ответ' }
-            : { no: 'Ответ не помог' }),
-          ...(groupedIntents.actions.length
-            ? { actions: 'Просмотреть связанные задачи 👀' }
-            : {}),
+          keyboard: [
+            {
+              yes: 'Спасибо, ответ помог',
+              ...(groupedIntents.actions.length > i + 1
+                ? { no: 'Другой ответ' }
+                : { no: 'Ответ не помог' }),
+            },
+            {
+              ...(groupedIntents.actions.length
+                ? { actions: 'Просмотреть связанные задачи 👀' }
+                : {}),
+            },
+          ],
         },
         keyboard,
       )
@@ -141,9 +147,13 @@ ${
     Вы хотите <b>${label}</b>?
   `,
           {
-            yes: 'Да',
-            no: 'Нет',
-            cancel: 'Отменить',
+            keyboard: [
+              {
+                yes: 'Да',
+                no: 'Нет',
+                cancel: 'Отменить',
+              },
+            ],
           },
         )
         .then(d => d.message)

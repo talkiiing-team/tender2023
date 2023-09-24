@@ -22,7 +22,7 @@ export const initNLPMiddlewares = async () => {
     const classes = result.classifications.filter(
       v =>
         !v.intent.startsWith('ignored') &&
-        (v.score >= 0.2 || v.intent.startsWith('pretrain')),
+        (v.score >= 0.2 || (v.intent.startsWith('pretrain') && v.score > 0)),
     )
 
     const ignored = result.classifications.filter(v =>
@@ -48,5 +48,5 @@ export const initNLPMiddlewares = async () => {
       nlp,
     })
   })
-  return composer
+  return composer.middleware()
 }

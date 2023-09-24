@@ -28,6 +28,7 @@ export const scenarios: Scenario = {
   new: ['найти товар', 'новая поставка'],
   ignored: {
     hello: ['здравствуйте', 'привет', 'добрый день вечер утро', 'что новое'],
+    thanks: ['спасибо'],
   },
   pretrain: {
     1: [
@@ -216,8 +217,9 @@ export const scenariosAnswer: ScenarioAnswers = {
   ignored: {
     hello:
       'Приветствую! Возможно вы задали вопрос, но я не смог найти ответ на него, повторите его еще раз, пожалуйста',
+    thanks: 'Пожалуйста! Обращайтесь 🤝',
   },
-  pretrain: formAnswersPretrain(90),
+  pretrain: formAnswersPretrain(89),
 }
 
 export const scenarioActions: ScenarioActions = {

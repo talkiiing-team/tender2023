@@ -18,3 +18,11 @@ export const requester = ({ query }: { query: string }) => {
     },
   )
 }
+
+export const getFullSearchLink = (query: string) =>
+  `https://zakupki.mos.ru/catalog/goods/1/list?filter=${encodeURI(
+    JSON.stringify({ keyword: query }),
+  )}`
+
+export const getImageSrc = (imageId: string | number) =>
+  `https://zakupki.mos.ru/newapi/api/Core/Thumbnail/${imageId}/300/300`
