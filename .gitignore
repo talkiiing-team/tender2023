@@ -6,3 +6,4 @@ model_bert.pkl
 bin
 lib
 db-data/
+share

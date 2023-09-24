@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import dill
 import re
 import os
+from fuzzywuzzy import fuzz
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 

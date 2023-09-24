@@ -54,10 +54,13 @@ export const initNLPMiddlewares = async () => {
       )
 
       const answer = await axios
-        .post<{ answer: string }>(`${PYTHON_SERVICE_URL}/answer`, {
-          prompt: ctx.message.text,
-        })
-        .then(r => r.data?.answer)
+        .post<{ answer: { answer: string; context: string } }>(
+          `${PYTHON_SERVICE_URL}/answer`,
+          {
+            prompt: ctx.message.text,
+          },
+        )
+        .then(r => r.data?.answer?.answer)
         .catch(e => undefined)
 
       console.log('ml answer', answer)
