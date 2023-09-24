@@ -6,7 +6,7 @@
   "scripts": {
     "exec": "node -r jiti/register -r tsconfig-paths/register -r dotenv/config",
     "start": "npm run exec apps/bot/main.ts",
-    "dev": "nodemon",
+    "dev": "nodemon & python3.9 apps/python-ml/main.py",
     "test": "vitest",
     "start:prod": "npx prisma migrate deploy && npm run exec apps/bot/main.ts"
   },

@@ -1,4 +1,4 @@
-FROM python:3.11.0-bullseye
+FROM python:3.9.18-bullseye
 
 WORKDIR /home/pn/app
 

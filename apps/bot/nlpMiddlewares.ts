@@ -3,6 +3,7 @@ import { initNLP } from '@apps/nlp/nlp'
 import { presentScriptToMiddleware } from '@libs/shared/scripts'
 import { handleNLPScript } from '@libs/scripts/handleNLP'
 import { scenarioActions } from '@libs/nlp/scenarios/list'
+import axios from 'axios'
 
 export const initNLPMiddlewares = async () => {
   const { nlp, stemmer } = await initNLP()
@@ -22,7 +23,8 @@ export const initNLPMiddlewares = async () => {
     const classes = result.classifications.filter(
       v =>
         !v.intent.startsWith('ignored') &&
-        (v.score >= 0.2 || (v.intent.startsWith('pretrain') && v.score > 0)),
+        ((!v.intent.startsWith('pretrain') && v.score >= 0.2) ||
+          (v.intent.startsWith('pretrain') && v.score > 0.7)),
     )
 
     const ignored = result.classifications.filter(v =>
@@ -33,9 +35,12 @@ export const initNLPMiddlewares = async () => {
 
     if (result.intent === 'None') {
       await ctx.reply(
-        'Сейчас постараюсь найти информацию... (отправляем запрос в пайфн)',
+        'Сейчас постараюсь найти информацию, подождите, пожалуйста... ',
       )
-      // Python
+      const answer = await axios.post('http://localhost:5001/answer', {
+        prompt: ctx.message.text,
+      })
+      await ctx.reply(answer.data.answer)
       return
     } else if ((utilityMessage && result.answer?.length) || !classes.length) {
       await ctx.reply(result.answer)
