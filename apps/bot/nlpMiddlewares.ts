@@ -28,7 +28,7 @@ export const initNLPMiddlewares = async () => {
       v =>
         !v.intent.startsWith('ignored') &&
         ((!v.intent.startsWith('pretrain') && v.score >= 0.2) ||
-          (v.intent.startsWith('pretrain') && v.score > 0.7)),
+          (v.intent.startsWith('pretrain') && v.score > 0.5)),
     )
 
     const badClasses = result.classifications.filter(
