@@ -51,6 +51,7 @@ export const handleNLPScript = async (
       v => v.score >= highestRating - ALPHA,
     )
   }
+  const questionsCount = !!groupedIntents.questions.length
 
   console.log(JSON.stringify(groupedIntents))
 
@@ -176,7 +177,12 @@ ${
         break
       default:
         await dialog.answer(
-          `
+          questionsCount
+            ? `
+К сожалению, больше ответов у меня нет.
+Возможно, Вы могли бы переформулировать вопрос?
+Я передам ваш вопрос человеку :)`
+            : `
 К сожалению, я не смог Вам помочь, попробуйте еще раз.
 Возможно, Вы могли бы переформулировать вопрос?
         `,
