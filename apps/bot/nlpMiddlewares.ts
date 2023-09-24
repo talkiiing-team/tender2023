@@ -34,7 +34,7 @@ export const initNLPMiddlewares = async () => {
       v.intent.startsWith('ignored'),
     )
 
-    const utilityMessage = ignored.length && !classes.length
+    const utilityMessage = ignored.reduce((acc, v) => acc + v.score, 0) > 0.7
 
     if (result.intent === 'None') {
       await ctx.reply(
@@ -43,9 +43,9 @@ export const initNLPMiddlewares = async () => {
       const answer = await axios.post(`${PYTHON_SERVICE_URL}/answer`, {
         prompt: ctx.message.text,
       })
-      await ctx.reply(answer.data.answer)
+      await ctx.reply('Этот ответ вам должен подойти:\n\n', answer.data.answer)
       return
-    } else if ((utilityMessage && result.answer?.length) || !classes.length) {
+    } else if (utilityMessage) {
       await ctx.reply(result.answer)
       return
     }

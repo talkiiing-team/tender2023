@@ -96,7 +96,10 @@ export class GrammyDialog implements Dialog {
       )
 
       const builtKeyboard = inlineKeyboard
-        ? InlineKeyboard.from(inlineKeyboard.inline_keyboard)
+        ? InlineKeyboard.from([
+            ...inlineKeyboard.inline_keyboard,
+            ...buttonRows,
+          ])
         : InlineKeyboard.from(buttonRows)
 
       await this.#ctx.reply(question, {
