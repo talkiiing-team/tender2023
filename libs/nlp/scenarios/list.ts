@@ -6,6 +6,7 @@ import {
 import { readFileSync } from 'fs'
 import { InlineKeyboard } from 'grammy'
 import * as path from 'path'
+import dataset from './dataset.json'
 
 export const readAnswerText = (q: number) => {
   return readFileSync(
@@ -244,6 +245,7 @@ export const scenarios: Scenario = {
     87: ['что такое судир', 'определение судир'],
     88: ['что такое уаис бу', 'определение уаис бу'],
     89: ['что такое ЭМ МО ЕАСУЗ', 'определение ЭМ МО ЕАСУЗ'],
+    ...Object.fromEntries(dataset.map(entry => [entry.id, [entry.question]])),
   },
 }
 
@@ -260,7 +262,10 @@ export const scenariosAnswer: ScenarioAnswers = {
       'Приветствую! Возможно вы задали вопрос, но я не смог найти ответ на него, повторите его еще раз, пожалуйста',
     thanks: 'Пожалуйста! Обращайтесь 🤝',
   },
-  pretrain: formAnswersPretrain(89),
+  pretrain: {
+    ...formAnswersPretrain(89),
+    ...Object.fromEntries(dataset.map(entry => [entry.id, entry.answer])),
+  },
 }
 
 export const scenarioActions: ScenarioActions = {
