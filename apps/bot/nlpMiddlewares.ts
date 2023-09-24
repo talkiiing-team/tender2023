@@ -40,10 +40,21 @@ export const initNLPMiddlewares = async () => {
       await ctx.reply(
         'Сейчас постараюсь найти информацию, подождите, пожалуйста... ',
       )
-      const answer = await axios.post(`${PYTHON_SERVICE_URL}/answer`, {
-        prompt: ctx.message.text,
-      })
-      await ctx.reply('Этот ответ вам должен подойти:\n\n', answer.data.answer)
+
+      const answer = await axios
+        .post<{ answer: string }>(`${PYTHON_SERVICE_URL}/answer`, {
+          prompt: ctx.message.text,
+        })
+        .then(r => r.data?.answer)
+        .catch(e => undefined)
+      if (!answer) {
+        await ctx.reply(
+          'К сожалению, я не могу подобрать ответ для Ваc в данный момент\n\n' +
+            'Попробуйте, пожалуйста, позднее',
+        )
+        return
+      }
+      await ctx.reply('Этот ответ вам должен подойти:\n\n', answer)
       return
     } else if (utilityMessage) {
       await ctx.reply(result.answer)
